@@ -21,7 +21,7 @@
         <Label x:Name="passwordLabel" Content="Password" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,222,0,0"/>
         <PasswordBox x:Name="passwordInput" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" Margin="0,248,0,0"/>
 
-        <Button x:Name="singUpButton" Click="singUpButton_Click" Content="Sing Up" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Margin="0,277,0,0"/>
+        <Button x:Name="singUpButton" Click="singUpButton_Click" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Margin="0,277,0,0"/>
         <Button x:Name="backButton" Click="backButton_Click" Content="Back" HorizontalAlignment="Center" Margin="0,302,0,0" VerticalAlignment="Top" Width="120"/>
 
         <Frame x:Name="singupFrame" />

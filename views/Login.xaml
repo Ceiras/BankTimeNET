@@ -15,7 +15,7 @@
         <PasswordBox x:Name="passwordInput" Grid.Column="1" HorizontalAlignment="Center" Margin="0,155,0,0" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center"/>
 
         <Button x:Name="loginButton" Click="loginButton_Click" Grid.Column="1" Content="Login" HorizontalAlignment="Center" Margin="0,182,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="singupButton" Click="singupButton_Click" Grid.Column="1" Content="Registrarse" HorizontalAlignment="Center" Margin="0,207,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="singupButton" Click="singupButton_Click" Grid.Column="1" Content="Sing Up" HorizontalAlignment="Center" Margin="0,207,0,0" VerticalAlignment="Top" Width="120"/>
 
         <Frame x:Name="loginFrame" />
     </Grid>
