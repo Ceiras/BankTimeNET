@@ -24,7 +24,7 @@ namespace BankTimeNET.Views
 
             using (var db = new DatabaseContext())
             {
-                User? res = db.Users.Where((User user) => user.Dni.Equals(dni) && user.Password.Equals(password)).FirstOrDefault();
+                User? res = db.Users.Where((User user) => user.Dni.Equals(dni) && user.Password.Equals(password) && user.Active.Equals(true)).FirstOrDefault();
                 if (res != null)
                 {
                     AppStore.currentUser = res;

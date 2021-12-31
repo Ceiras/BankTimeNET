@@ -21,6 +21,8 @@
         <Label Name="bankLabel" Content="Bank" HorizontalAlignment="Left" Margin="55,80,0,0" VerticalAlignment="Top"/>
 
         <Button Name="associateBankButton" Content="" Click="associateBankButton_Click" HorizontalAlignment="Left" Margin="22,111,0,0" VerticalAlignment="Top" Width="106"/>
+        <Button Name="requestServiceButton" Content="Request Service" Click="requestServiceButton_Click" HorizontalAlignment="Left" Margin="22,141,0,0" VerticalAlignment="Top" Width="106"/>
+        <Button Name="unregisterButton" Content="Unregister" Click="unregisterButton_Click" HorizontalAlignment="Left" Margin="22,173,0,0" VerticalAlignment="Top" Width="106"/>
 
         <Separator HorizontalAlignment="Left" Margin="24,226,0,0" VerticalAlignment="Top" Background="Black" Width="452" RenderTransformOrigin="0.5,0.5">
             <Separator.RenderTransform>
