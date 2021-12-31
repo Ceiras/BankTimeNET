@@ -59,7 +59,7 @@ namespace BankTimeNET.Migrations
                     DoneTime = table.Column<int>(type: "int", nullable: false),
                     State = table.Column<int>(type: "int", nullable: false),
                     RequestUserId = table.Column<int>(type: "int", nullable: false),
-                    DoneUserId = table.Column<int>(type: "int", nullable: false),
+                    DoneUserId = table.Column<int>(type: "int", nullable: true),
                     BankId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -70,13 +70,13 @@ namespace BankTimeNET.Migrations
                         column: x => x.BankId,
                         principalTable: "Banks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Services_Users_DoneUserId",
                         column: x => x.DoneUserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Services_Users_RequestUserId",
                         column: x => x.RequestUserId,

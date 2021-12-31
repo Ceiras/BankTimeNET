@@ -46,6 +46,23 @@ namespace BankTimeNET.Data
                 dataSet.Tables.Add(banksTable);
             }
 
+            if (dataSet.Tables["Services"] == null)
+            {
+                DataTable servicesTable = new DataTable();
+                servicesTable.TableName = "Services";
+
+                servicesTable.Columns.Add("date");
+                servicesTable.Columns.Add("description");
+                servicesTable.Columns.Add("requestTime");
+                servicesTable.Columns.Add("doneTime");
+                servicesTable.Columns.Add("state");
+                servicesTable.Columns.Add("requestUserId");
+                servicesTable.Columns.Add("doneUserId");
+                servicesTable.Columns.Add("bankId");
+
+                dataSet.Tables.Add(servicesTable);
+            }
+
             return dataSet;
         }
 

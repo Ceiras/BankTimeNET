@@ -25,9 +25,11 @@ namespace BankTimeNET.Views
             if (AppStore.currentUser.Bank == null)
             {
                 this.associateBankButton.Content = "Associate Bank";
+                this.requestServiceButton.IsEnabled = false;
             } else
             {
                 this.associateBankButton.Content = "Change Bank";
+                this.requestServiceButton.IsEnabled = true;
             }
         }
 
@@ -38,7 +40,7 @@ namespace BankTimeNET.Views
 
         private void requestServiceButton_Click(object sender, RoutedEventArgs e)
         {
-
+            homeFrame.Navigate(new RequestService());
         }
 
         private void unregisterButton_Click(object sender, RoutedEventArgs e)
