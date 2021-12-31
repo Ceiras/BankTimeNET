@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BankTimeNET.views
+namespace BankTimeNET.Views
 {
     /// <summary>
     /// Lógica de interacción para Login.xaml

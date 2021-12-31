@@ -2,13 +2,18 @@
 {
     public class User
     {
-        public User(string dni, string name, string? password, int amount, bool active)
+        public User()
+        {
+        }
+
+        public User(string dni, string name, string? password, int amount, bool active, Bank bank)
         {
             Dni = dni;
             Name = name;
             Password = password;
             Amount = amount;
             Active = active;
+            Bank = bank;
         }
 
         public int Id { get; set; }

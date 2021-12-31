@@ -6,7 +6,7 @@ using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BankTimeNET.views
+namespace BankTimeNET.Views
 {
     /// <summary>
     /// Lógica de interacción para SingUp.xaml
@@ -27,7 +27,7 @@ namespace BankTimeNET.views
             {
                 try
                 {
-                    User newUser = new User(dni, name, password, 0, true);
+                    User newUser = new(dni, name, password, 0, true, null);
                     db.Users.Add(newUser);
                     int res = db.SaveChanges();
                     if (res == 1)
@@ -65,7 +65,6 @@ namespace BankTimeNET.views
 
                 DataXml.writeDataXml(dataset);
             }
-
             catch (Exception e)
             {
                 MessageBox.Show("Exception: {0}", e.ToString());

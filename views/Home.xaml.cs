@@ -3,7 +3,7 @@ using BankTimeNET.Views;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BankTimeNET.views
+namespace BankTimeNET.Views
 {
     /// <summary>
     /// Lógica de interacción para Home.xaml
@@ -20,10 +20,10 @@ namespace BankTimeNET.views
 
             if (AppStore.currentUser.Bank == null)
             {
-                this.associateBankButton.Visibility = Visibility.Visible;
+                this.associateBankButton.Content = "Associate Bank";
             } else
             {
-                this.associateBankButton.Visibility = Visibility.Hidden;
+                this.associateBankButton.Content = "Change Bank";
             }
         }
 

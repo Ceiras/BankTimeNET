@@ -20,6 +20,7 @@ namespace BankTimeNET.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Banks", x => x.Id);
+                    table.UniqueConstraint("PK_Unique_Place", x => x.Place);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,7 +76,7 @@ namespace BankTimeNET.Migrations
                         column: x => x.DoneUserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Services_Users_RequestUserId",
                         column: x => x.RequestUserId,

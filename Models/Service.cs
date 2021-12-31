@@ -5,6 +5,10 @@ namespace BankTimeNET
 {
     public class Service
     {
+        public Service()
+        {
+        }
+
         public int Id{ get; set; }
         public DateTime Date { get; set; }
         public String Description{ get; set; }

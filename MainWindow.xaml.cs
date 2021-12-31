@@ -1,4 +1,4 @@
-﻿using BankTimeNET.views;
+﻿using BankTimeNET.Views;
 using System.Windows;
 
 namespace BankTimeNET

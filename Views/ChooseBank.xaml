@@ -8,7 +8,15 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Choose Bank - Bank Time .NET">
     <Grid Background="White">
-        <Label Content="Choose Bank" HorizontalAlignment="Left" Margin="268,196,0,0" VerticalAlignment="Top"/>
+        <Label Name="newBankLabel" Content="New Bank Place" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="newBankInput" HorizontalAlignment="Left" Margin="130,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button Name="newBankButon" Content="Create Bank" Click="newBankButon_Click" HorizontalAlignment="Left" Margin="260,35,0,0" VerticalAlignment="Top" Width="100"/>
+
+        <ListBox Name="bankListBox" Margin="30,89,30,160"/>
+        
+        <Button Name="associateBankButton" Click="associateBankButton_Click" Content="Associate to this Bank" HorizontalAlignment="Center" Margin="0,323,0,0" VerticalAlignment="Top" Height="42" Width="224"/>
+
+        <Button Name="backButton" Click="backButton_Click" Content="Back" HorizontalAlignment="Center" Margin="0,384,0,0" VerticalAlignment="Top" Height="40" Width="98"/>
 
         <Frame x:Name="chooseBankFrame"/>
     </Grid>

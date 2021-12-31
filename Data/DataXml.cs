@@ -19,7 +19,10 @@ namespace BankTimeNET.Data
             } else
             {
                 dataSet = new DataSet(dataSetName);
+            }
 
+            if (dataSet.Tables["Users"] == null)
+            {
                 DataTable usersTable = new DataTable();
                 usersTable.TableName = "Users";
 
@@ -31,6 +34,16 @@ namespace BankTimeNET.Data
                 usersTable.Columns.Add("bankId");
 
                 dataSet.Tables.Add(usersTable);
+            }
+
+            if (dataSet.Tables["Banks"] == null)
+            {
+                DataTable banksTable = new DataTable();
+                banksTable.TableName = "Banks";
+
+                banksTable.Columns.Add("place");
+
+                dataSet.Tables.Add(banksTable);
             }
 
             return dataSet;

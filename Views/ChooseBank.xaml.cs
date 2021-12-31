@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BankTimeNET.Data;
+using BankTimeNET.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BankTimeNET.Views
 {
@@ -23,6 +17,149 @@ namespace BankTimeNET.Views
         public ChooseBank()
         {
             InitializeComponent();
+            populateBankListView();
+        }
+
+        private void populateBankListView()
+        {
+            using (var db = new DatabaseContext())
+            {
+                this.bankListBox.Items.Clear();
+                try
+                {
+                    ListView bankListView = new ListView();
+                    foreach(Bank bank in db.Banks)
+                    {
+                        this.bankListBox.Items.Add(bank.Place);
+                    }
+                }
+                catch (DbUpdateException sqlException)
+                {
+                    MessageBox.Show("ERROR: " + sqlException.InnerException);
+                }
+            }
+        }
+
+        private void newBankButon_Click(object sender, RoutedEventArgs e)
+        {
+            String bankPlace = this.newBankInput.Text;
+
+            if (bankPlace.Length > 0)
+            {
+                using (var db = new DatabaseContext())
+                {
+                    try
+                    {
+                        Bank newBank = new Bank(bankPlace);
+                        db.Banks.Add(newBank);
+                        int res = db.SaveChanges();
+
+                        if (res == 1)
+                        {
+                            addBankXml(newBank);
+                            this.newBankInput.Text = "";
+                            this.populateBankListView();
+                            MessageBox.Show("Created successfully");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error creating the new bank");
+                        }
+                    }
+                    catch (DbUpdateException sqlException)
+                    {
+                        MessageBox.Show("ERROR: " + sqlException.InnerException);
+                    }
+                }
+            }
+        }
+
+        private void addBankXml(Bank bank)
+        {
+            try
+            {
+                DataSet dataset = DataXml.readDataXml();
+
+                DataRow newBank = dataset.Tables["Banks"].NewRow();
+                newBank["place"] = bank.Place;
+                dataset.Tables["Banks"].Rows.Add(bank.Place);
+
+                DataXml.writeDataXml(dataset);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Exception: {0}", e.ToString());
+            }
+        }
+
+        private void associateBankButton_Click(object sender, RoutedEventArgs e)
+        {
+            String selectedItem = this.bankListBox.Items[this.bankListBox.SelectedIndex].ToString();
+
+            using (var db = new DatabaseContext())
+            {
+                Bank? resBank = db.Banks.Where((Bank bank) => bank.Place.Equals(selectedItem)).FirstOrDefault();
+                if (resBank != null)
+                {
+                    User? resUser = db.Users.Where((User user) => user.Dni.Equals(AppStore.currentUser.Dni)).FirstOrDefault();
+                    if (resUser != null)
+                    {
+                        resUser.Bank = resBank;
+                        int res = db.SaveChanges();
+                        if (res == 1)
+                        {
+                            updateBankToUserXml(resUser, resBank);
+                            AppStore.currentUser = resUser;
+                            MessageBox.Show("Bank associated successfully");
+                            chooseBankFrame.Navigate(new Home());
+                        }
+                        else
+                        {
+                            MessageBox.Show("It had been impossible associate the bank to the user because fails the connection to database");
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("It had been impossible associate the bank to the user");
+                }
+            }
+        }
+
+        private void updateBankToUserXml(User user, Bank bank)
+        {
+            try
+            {
+                DataSet dataset = DataXml.readDataXml();
+
+                DataRow userRow = null;
+                foreach(DataRow row in dataset.Tables["Users"].Rows)
+                {
+                    if (row.ItemArray[0].Equals(user.Dni))
+                    {
+                        userRow = row;
+                        break;
+                    }
+                }
+
+                if (userRow != null)
+                {
+                    userRow.BeginEdit();
+                    userRow["bankId"] = bank.Id;
+                    userRow.EndEdit();
+
+                    DataXml.writeDataXml(dataset);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Exception: {0}", e.ToString());
+            }
+        }
+
+        private void backButton_Click(object sender, RoutedEventArgs e)
+        {
+            chooseBankFrame.Navigate(new Home());
         }
     }
 }
