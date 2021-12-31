@@ -1,5 +1,5 @@
-﻿using BankTimeNET.db;
-using BankTimeNET.models;
+﻿using BankTimeNET.Data;
+using BankTimeNET.Models;
 using System;
 using System.Linq;
 using System.Windows;
@@ -27,7 +27,7 @@ namespace BankTimeNET.views
                 User? res = db.Users.Where((User user) => user.Dni.Equals(dni) && user.Password.Equals(password)).FirstOrDefault();
                 if (res != null)
                 {
-                    Store.currentUser = res;
+                    AppStore.currentUser = res;
                     loginFrame.Navigate(new Home());
                 }
                 else

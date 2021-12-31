@@ -1,4 +1,6 @@
-﻿using BankTimeNET.db;
+﻿using BankTimeNET.Data;
+using BankTimeNET.Views;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace BankTimeNET.views
@@ -11,14 +13,23 @@ namespace BankTimeNET.views
         public Home()
         {
             InitializeComponent();
-            this.nameLabel.Content = Store.currentUser.Name;
-            this.dniLabel.Content = Store.currentUser.Dni;
-            this.amountLabel.Content = Store.currentUser.Amount;
+            this.nameLabel.Content = AppStore.currentUser.Name;
+            this.dniLabel.Content = AppStore.currentUser.Dni;
+            this.amountLabel.Content = AppStore.currentUser.Amount + " h";
+            this.bankLabel.Content = AppStore.currentUser.Bank != null ? AppStore.currentUser.Bank.Place : '-';
+
+            if (AppStore.currentUser.Bank == null)
+            {
+                this.associateBankButton.Visibility = Visibility.Visible;
+            } else
+            {
+                this.associateBankButton.Visibility = Visibility.Hidden;
+            }
         }
 
-        private void homeFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        private void associateBankButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            homeFrame.Navigate(new ChooseBank());
         }
     }
 }

@@ -10,15 +10,17 @@
     <Grid Background="White">
         <Label Name="nameTitleLabel" Content="Name:" HorizontalAlignment="Left" Margin="15,20,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Name="nameLabel" Content="Name" HorizontalAlignment="Left" Margin="60,20,0,0" VerticalAlignment="Top"/>
-        
+
         <Label Name="dniTitleLabel" Content="DNI:" HorizontalAlignment="Left" Margin="15,40,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Name="dniLabel" Content="DNI" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top"/>
 
         <Label Name="amountTitleLabel" Content="Amount:" HorizontalAlignment="Left" Margin="15,60,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Name="amountLabel" Content="Amount" HorizontalAlignment="Left" Margin="75,60,0,0" VerticalAlignment="Top"/>
-        
+
         <Label Name="bankTitleLabel" Content="Bank:" HorizontalAlignment="Left" Margin="15,80,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Name="bankLabel" Content="Bank" HorizontalAlignment="Left" Margin="55,80,0,0" VerticalAlignment="Top"/>
+
+        <Button Name="associateBankButton" Content="Associate Bank" Click="associateBankButton_Click" HorizontalAlignment="Left" Margin="22,111,0,0" VerticalAlignment="Top" Width="106"/>
 
         <Separator HorizontalAlignment="Left" Margin="24,226,0,0" VerticalAlignment="Top" Background="Black" Width="452" RenderTransformOrigin="0.5,0.5">
             <Separator.RenderTransform>
@@ -31,6 +33,6 @@
             </Separator.RenderTransform>
         </Separator>
 
-        <Frame x:Name="homeFrame" Navigated="homeFrame_Navigated" />
+        <Frame x:Name="homeFrame"/>
     </Grid>
 </Page>

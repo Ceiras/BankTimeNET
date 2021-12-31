@@ -1,5 +1,4 @@
-﻿using BankTimeNET.models;
-using Microsoft.OData.Edm;
+﻿using BankTimeNET.Models;
 using System;
 
 namespace BankTimeNET

@@ -1,4 +1,4 @@
-﻿using BankTimeNET.models;
+﻿using BankTimeNET.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankTimeNET

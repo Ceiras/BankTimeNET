@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BankTimeNET.models
+namespace BankTimeNET.Models
 {
     public class Bank
     {

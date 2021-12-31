@@ -1,4 +1,4 @@
-﻿namespace BankTimeNET.models
+﻿namespace BankTimeNET.Models
 {
     public class User
     {
