@@ -1,6 +1,6 @@
-﻿using BankTimeNET.db;
+﻿using BankTimeNET.models;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,33 +19,29 @@ namespace BankTimeNET.views
         {
             String dni = this.dniInput.Text;
             String name = this.nameInput.Text;
-            String username = this.usernameInput.Text;
             String password = this.passwordInput.Password;
 
-            SqlConnection sqlConnection = Db.connect();
-            SqlCommand cmd = sqlConnection.CreateCommand();
-            cmd.CommandText = "INSERT INTO [Users] (dni, name, username, password, amount, active) VALUES (@dni, @name, @username, @password, 0, 1)";
-            cmd.Parameters.AddWithValue("@dni", dni);
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@username", username);
-            cmd.Parameters.AddWithValue("@password", password);
-            cmd.Connection = sqlConnection;
-
-            try
+            using (var db = new DatabaseContext())
             {
-                int res = cmd.ExecuteNonQuery();
-                if (res == 1)
+                try
                 {
-                    MessageBox.Show("Inserted successfully");
-                    singupFrame.Navigate(new Login());
+                    User newUser = new User(dni, name, password, 0, true);
+                    db.Users.Add(newUser);
+                    int res = db.SaveChanges();
+                    if (res == 1)
+                    {
+                        MessageBox.Show("Inserted successfully");
+                        singupFrame.Navigate(new Login());
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error creating the new user");
+                    }
                 }
-                else
+                catch (DbUpdateException sqlException)
                 {
-                    MessageBox.Show("Error creating the new user");
+                    MessageBox.Show("ERROR: " + sqlException.InnerException);
                 }
-            } catch (SqlException sqlException)
-            {
-                MessageBox.Show("ERROR: " + sqlException.Message);
             }
         }
 

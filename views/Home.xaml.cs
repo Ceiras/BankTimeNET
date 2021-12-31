@@ -11,7 +11,14 @@ namespace BankTimeNET.views
         public Home()
         {
             InitializeComponent();
-            this.userLabel.Content = Store.currentUser;
+            this.nameLabel.Content = Store.currentUser.Name;
+            this.dniLabel.Content = Store.currentUser.Dni;
+            this.amountLabel.Content = Store.currentUser.Amount;
+        }
+
+        private void homeFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+
         }
     }
 }

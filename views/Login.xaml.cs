@@ -1,7 +1,7 @@
 ﻿using BankTimeNET.db;
 using BankTimeNET.models;
 using System;
-using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,37 +19,22 @@ namespace BankTimeNET.views
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
-            String username = this.usernameInput.Text;
+            String dni = this.dniInput.Text;
             String password = this.passwordInput.Password;
 
-            SqlConnection sqlConnection = Db.connect();
-            SqlCommand cmd = sqlConnection.CreateCommand();
-            cmd.CommandText = "SELECT TOP(1) * FROM [Users] WHERE username=@username AND password=@password";
-            cmd.Parameters.AddWithValue("@username", username);
-            cmd.Parameters.AddWithValue("@password", password);
-            cmd.Connection = sqlConnection;
-
-            SqlDataReader sqlReader = cmd.ExecuteReader();
-
-            if (sqlReader.HasRows)
+            using (var db = new DatabaseContext())
             {
-                while (sqlReader.Read())
+                User? res = db.Users.Where((User user) => user.Dni.Equals(dni) && user.Password.Equals(password)).FirstOrDefault();
+                if (res != null)
                 {
-                    Store.currentUser = new User();
-                    Store.currentUser.Dni = sqlReader["dni"].ToString();
-                    Store.currentUser.Name = sqlReader["name"].ToString();
-                    Store.currentUser.Username = sqlReader["username"].ToString();
-                    Store.currentUser.Amount = Int32.Parse(sqlReader["amount"].ToString());
-                    Store.currentUser.Active = bool.Parse(sqlReader["active"].ToString());
+                    Store.currentUser = res;
+                    loginFrame.Navigate(new Home());
                 }
-
-                loginFrame.Navigate(new Home());
+                else
+                {
+                    MessageBox.Show("The login is wrong");
+                }
             }
-            else
-            {
-                MessageBox.Show("Login error");
-            }
-
         }
 
         private void singupButton_Click(object sender, RoutedEventArgs e)

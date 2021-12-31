@@ -8,8 +8,29 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Home - Bank Time .NET">
     <Grid Background="White">
-        <Label Name="userLabel" Content="Label" HorizontalAlignment="Left" Margin="362,183,0,0" VerticalAlignment="Top"/>
+        <Label Name="nameTitleLabel" Content="Name:" HorizontalAlignment="Left" Margin="15,20,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Name="nameLabel" Content="Name" HorizontalAlignment="Left" Margin="60,20,0,0" VerticalAlignment="Top"/>
+        
+        <Label Name="dniTitleLabel" Content="DNI:" HorizontalAlignment="Left" Margin="15,40,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Name="dniLabel" Content="DNI" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top"/>
 
-        <Frame x:Name="homeFrame" />
+        <Label Name="amountTitleLabel" Content="Amount:" HorizontalAlignment="Left" Margin="15,60,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Name="amountLabel" Content="Amount" HorizontalAlignment="Left" Margin="75,60,0,0" VerticalAlignment="Top"/>
+        
+        <Label Name="bankTitleLabel" Content="Bank:" HorizontalAlignment="Left" Margin="15,80,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Name="bankLabel" Content="Bank" HorizontalAlignment="Left" Margin="55,80,0,0" VerticalAlignment="Top"/>
+
+        <Separator HorizontalAlignment="Left" Margin="24,226,0,0" VerticalAlignment="Top" Background="Black" Width="452" RenderTransformOrigin="0.5,0.5">
+            <Separator.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Separator.RenderTransform>
+        </Separator>
+
+        <Frame x:Name="homeFrame" Navigated="homeFrame_Navigated" />
     </Grid>
 </Page>

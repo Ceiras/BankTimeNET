@@ -15,14 +15,11 @@
         <Label x:Name="dniLabel" Content="DNI" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,134,0,0" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <TextBox x:Name="dniInput" HorizontalAlignment="Center" Margin="0,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
-        <Label x:Name="usernameLabel" Content="Username" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,178,0,0" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="usernameInput" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,204,0,0"/>
+        <Label x:Name="passwordLabel" Content="Password" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,178,0,0" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <PasswordBox x:Name="passwordInput" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Margin="0,204,0,0" HorizontalContentAlignment="Center"/>
 
-        <Label x:Name="passwordLabel" Content="Password" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,222,0,0"/>
-        <PasswordBox x:Name="passwordInput" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" Margin="0,248,0,0"/>
-
-        <Button x:Name="singUpButton" Click="singUpButton_Click" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Margin="0,277,0,0"/>
-        <Button x:Name="backButton" Click="backButton_Click" Content="Back" HorizontalAlignment="Center" Margin="0,302,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="singUpButton" Click="singUpButton_Click" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Margin="0,243,0,0"/>
+        <Button x:Name="backButton" Click="backButton_Click" Content="Back" HorizontalAlignment="Center" Margin="0,270,0,0" VerticalAlignment="Top" Width="120"/>
 
         <Frame x:Name="singupFrame" />
     </Grid>
