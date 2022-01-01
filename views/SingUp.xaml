@@ -9,6 +9,8 @@
       Title="SingUp - Bank Time .NET">
 
     <Grid Background="White">
+        <Label Name="singUpTitle" Content="Sing Up" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" FontSize="36" FontWeight="Bold"/>
+
         <Label x:Name="nameLabel" Content="Name" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,90,0,0" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <TextBox x:Name="nameInput" HorizontalAlignment="Center" Margin="0,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 

@@ -2,6 +2,7 @@
 using BankTimeNET.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows;
@@ -17,19 +18,97 @@ namespace BankTimeNET.Views
         public Home()
         {
             InitializeComponent();
+            InitializeUserData();
+            InitializeActionButtons();
+            InitializeAceptedServicesTable();
+            InitializeRequestedServicesTable();
+            InitializeBankServicesTable();
+        }
+
+        private void InitializeUserData()
+        {
             this.nameLabel.Content = AppStore.currentUser.Name;
             this.dniLabel.Content = AppStore.currentUser.Dni;
             this.amountLabel.Content = AppStore.currentUser.Amount + " h";
             this.bankLabel.Content = AppStore.currentUser.Bank != null ? AppStore.currentUser.Bank.Place : '-';
+        }
 
+        private void InitializeActionButtons()
+        {
             if (AppStore.currentUser.Bank == null)
             {
                 this.associateBankButton.Content = "Associate Bank";
                 this.requestServiceButton.IsEnabled = false;
-            } else
+            }
+            else
             {
                 this.associateBankButton.Content = "Change Bank";
                 this.requestServiceButton.IsEnabled = true;
+            }
+        }
+
+        private void InitializeRequestedServicesTable()
+        {
+            using (var db = new DatabaseContext())
+            {
+                try
+                {
+                    List<Service> resServices = db.Services
+                        .Include((Service service) => service.RequestUser)
+                        .Include((Service service) => service.DoneUser)
+                        .Include((Service service) => service.Bank)
+                        .Where((Service service) => service.Bank.Equals(AppStore.currentUser.Bank))
+                        .Where((Service service) => service.RequestUser.Equals(AppStore.currentUser))
+                        .ToList();
+                    this.requestedServicesListView.ItemsSource = resServices;
+                }
+                catch (DbUpdateException sqlException)
+                {
+                    MessageBox.Show("ERROR: " + sqlException.InnerException);
+                }
+            }
+        }
+
+        private void InitializeAceptedServicesTable()
+        {
+            using (var db = new DatabaseContext())
+            {
+                try
+                {
+                    List<Service> resServices = db.Services
+                        .Include((Service service) => service.RequestUser)
+                        .Include((Service service) => service.DoneUser)
+                        .Include((Service service) => service.Bank)
+                        .Where((Service service) => service.Bank.Equals(AppStore.currentUser.Bank))
+                        .Where((Service service) => service.DoneUser.Equals(AppStore.currentUser))
+                        .ToList();
+                    this.acceptedServicesListView.ItemsSource = resServices;
+                }
+                catch (DbUpdateException sqlException)
+                {
+                    MessageBox.Show("ERROR: " + sqlException.InnerException);
+                }
+            }
+        }
+
+        private void InitializeBankServicesTable()
+        {
+            using (var db = new DatabaseContext())
+            {
+                try
+                {
+                    List<Service> resServices = db.Services
+                        .Include((Service service) => service.RequestUser)
+                        .Include((Service service) => service.DoneUser)
+                        .Include((Service service) => service.Bank)
+                        .Where((Service service) => service.Bank.Equals(AppStore.currentUser.Bank))
+                        .ToList();
+                    this.bankServicesListView.ItemsSource = resServices;
+                }
+                catch (DbUpdateException sqlException)
+                {
+                    MessageBox.Show("ERROR: " + sqlException.InnerException);
+                }
             }
         }
 
@@ -66,7 +145,8 @@ namespace BankTimeNET.Views
                         {
                             MessageBox.Show("Error creating the new bank");
                         }
-                    } else
+                    }
+                    else
                     {
                         MessageBox.Show("The user selected does not exists");
                     }
