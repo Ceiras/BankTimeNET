@@ -54,7 +54,7 @@ namespace BankTimeNET.Views
                         db.Banks.Add(newBank);
                         int res = db.SaveChanges();
 
-                        if (res == 1)
+                        if (res > 0)
                         {
                             addBankXml(newBank);
                             this.newBankInput.Text = "";
@@ -106,7 +106,7 @@ namespace BankTimeNET.Views
                     {
                         resUser.Bank = resBank;
                         int res = db.SaveChanges();
-                        if (res == 1)
+                        if (res > 0)
                         {
                             updateBankToUserXml(resUser, resBank);
                             AppStore.currentUser = resUser;

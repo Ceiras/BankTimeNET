@@ -50,7 +50,7 @@ namespace BankTimeNET.Views
                     db.Entry(newService.Bank).State = EntityState.Unchanged;
                     db.Services.Add(newService);
                     int res = db.SaveChanges();
-                    if (res == 1)
+                    if (res > 0)
                     {
                         addServiceXml(newService);
                         MessageBox.Show("Services created", "New Service", MessageBoxButton.OK, MessageBoxImage.Information);

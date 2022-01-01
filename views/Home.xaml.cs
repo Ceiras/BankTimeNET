@@ -113,6 +113,8 @@ namespace BankTimeNET.Views
                         .Include((Service service) => service.DoneUser)
                         .Include((Service service) => service.Bank)
                         .Where((Service service) => service.Bank.Equals(AppStore.currentUser.Bank))
+                        .Where((Service service) => !service.RequestUser.Equals(AppStore.currentUser))
+                        .Where((Service service) => !service.State.Equals(ServiceState.Accepted))
                         .ToList();
                     this.bankServicesListView.ItemsSource = resServices;
                 }
@@ -145,7 +147,7 @@ namespace BankTimeNET.Views
                         resUser.Active = false;
                         int res = db.SaveChanges();
 
-                        if (res == 1)
+                        if (res > 0)
                         {
                             removeUserXml(resUser);
                             AppStore.currentUser = null;
@@ -210,7 +212,7 @@ namespace BankTimeNET.Views
                 {
                     db.Services.Remove(selectedItem);
                     int res = db.SaveChanges();
-                    if (res == 1)
+                    if (res > 0)
                     {
                         removeServiceXml(selectedItem);
                         this.InitializeTables();
@@ -244,6 +246,67 @@ namespace BankTimeNET.Views
             catch (Exception e)
             {
                 MessageBox.Show("Exception: " + e.ToString(), "ERROR: Remove Service", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void acceptService_Click(object sender, RoutedEventArgs e)
+        {
+            Service? selectedItem = this.bankServicesListView.SelectedIndex > -1 ? (Service)this.bankServicesListView.Items[this.bankServicesListView.SelectedIndex] : null;
+
+            if (selectedItem != null)
+            {
+                using (var db = new DatabaseContext())
+                {
+                    Service? resService = db.Services.Where((Service service) => service.Id.Equals(selectedItem.Id)).FirstOrDefault();
+                    if (resService != null)
+                    {
+                        resService.DoneUser = AppStore.currentUser;
+                        resService.State = ServiceState.Accepted;
+                        int res = db.SaveChanges();
+                        if (res > 0)
+                        {
+                            acceptServiceXml(resService);
+                            this.InitializeTables();
+                            MessageBox.Show("Service accepted", "Accept Service", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("It had been impossible accept the service because fails the connection to database", "ERROR: Accept Service", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void acceptServiceXml(Service service)
+        {
+            try
+            {
+                DataSet dataset = DataXml.readDataXml();
+
+                DataRow serviceRow = null;
+                foreach (DataRow row in dataset.Tables["Services"].Rows)
+                {
+                    if (row.ItemArray[0].Equals(service.Id.ToString()))
+                    {
+                        serviceRow = row;
+                        break;
+                    }
+                }
+
+                if (serviceRow != null)
+                {
+                    serviceRow.BeginEdit();
+                    serviceRow["doneUserId"] = AppStore.currentUser.Id;
+                    serviceRow["state"] = ServiceState.Accepted;
+                    serviceRow.EndEdit();
+
+                    DataXml.writeDataXml(dataset);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Accept Service", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

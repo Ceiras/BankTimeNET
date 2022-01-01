@@ -30,7 +30,7 @@ namespace BankTimeNET.Views
                     User newUser = new(dni, name, password, 0, true, null);
                     db.Users.Add(newUser);
                     int res = db.SaveChanges();
-                    if (res == 1)
+                    if (res > 0)
                     {
                         addUserXml(newUser);
                         MessageBox.Show("Inserted successfully", "New User", MessageBoxButton.OK, MessageBoxImage.Information);
