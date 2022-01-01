@@ -53,17 +53,17 @@ namespace BankTimeNET.Views
                     if (res == 1)
                     {
                         addServiceXml(newService);
-                        MessageBox.Show("Services created");
+                        MessageBox.Show("Services created", "New Service", MessageBoxButton.OK, MessageBoxImage.Information);
                         requestServiceFrame.Navigate(new Home());
                     }
                     else
                     {
-                        MessageBox.Show("Error creating the service");
+                        MessageBox.Show("Error creating the service", "ERROR: New Service", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 catch (DbUpdateException sqlException)
                 {
-                    MessageBox.Show("ERROR: " + sqlException.InnerException);
+                    MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: New Service", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -75,6 +75,7 @@ namespace BankTimeNET.Views
                 DataSet dataset = DataXml.readDataXml();
 
                 DataRow newService = dataset.Tables["Services"].NewRow();
+                newService["id"] = service.Id;
                 newService["date"] = service.Date;
                 newService["description"] = service.Description;
                 newService["requestTime"] = service.RequestTime;
@@ -89,7 +90,7 @@ namespace BankTimeNET.Views
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception: {0}", e.ToString());
+                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Add XML Service", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

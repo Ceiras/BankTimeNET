@@ -33,17 +33,17 @@ namespace BankTimeNET.Views
                     if (res == 1)
                     {
                         addUserXml(newUser);
-                        MessageBox.Show("Inserted successfully");
+                        MessageBox.Show("Inserted successfully", "New User", MessageBoxButton.OK, MessageBoxImage.Information);
                         singupFrame.Navigate(new Login());
                     }
                     else
                     {
-                        MessageBox.Show("Error creating the new user");
+                        MessageBox.Show("Error creating the user", "ERROR: New User", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 catch (DbUpdateException sqlException)
                 {
-                    MessageBox.Show("ERROR: " + sqlException.InnerException);
+                    MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: New User", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace BankTimeNET.Views
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception: {0}", e.ToString());
+                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Add XML User", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

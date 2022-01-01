@@ -33,7 +33,7 @@ namespace BankTimeNET.Views
                 }
                 else
                 {
-                    MessageBox.Show("The login is wrong");
+                    MessageBox.Show("The login is wrong", "Login", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

@@ -35,7 +35,7 @@ namespace BankTimeNET.Views
                 }
                 catch (DbUpdateException sqlException)
                 {
-                    MessageBox.Show("ERROR: " + sqlException.InnerException);
+                    MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: Choose Bank", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -59,16 +59,16 @@ namespace BankTimeNET.Views
                             addBankXml(newBank);
                             this.newBankInput.Text = "";
                             this.populateBankListView();
-                            MessageBox.Show("Created successfully");
+                            MessageBox.Show("Created successfully", "New Bank", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {
-                            MessageBox.Show("Error creating the new bank");
+                            MessageBox.Show("Error creating the new bank", "ERROR: New Bank", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                     catch (DbUpdateException sqlException)
                     {
-                        MessageBox.Show("ERROR: " + sqlException.InnerException);
+                        MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: New Bank", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace BankTimeNET.Views
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception: {0}", e.ToString());
+                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Add Bank", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -110,18 +110,18 @@ namespace BankTimeNET.Views
                         {
                             updateBankToUserXml(resUser, resBank);
                             AppStore.currentUser = resUser;
-                            MessageBox.Show("Bank associated successfully");
+                            MessageBox.Show("Bank associated successfully", "Choose Bank", MessageBoxButton.OK, MessageBoxImage.Information);
                             chooseBankFrame.Navigate(new Home());
                         }
                         else
                         {
-                            MessageBox.Show("It had been impossible associate the bank to the user because fails the connection to database");
+                            MessageBox.Show("It had been impossible associate the bank to the user because fails the connection to database", "ERROR: Choose Bank", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("It had been impossible associate the bank to the user");
+                    MessageBox.Show("It had been impossible associate the bank to the user", "ERROR: Choose Bank", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -153,7 +153,7 @@ namespace BankTimeNET.Views
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception: {0}", e.ToString());
+                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Choose Bank", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

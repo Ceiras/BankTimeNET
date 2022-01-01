@@ -51,6 +51,7 @@ namespace BankTimeNET.Data
                 DataTable servicesTable = new DataTable();
                 servicesTable.TableName = "Services";
 
+                servicesTable.Columns.Add("id");
                 servicesTable.Columns.Add("date");
                 servicesTable.Columns.Add("description");
                 servicesTable.Columns.Add("requestTime");
