@@ -75,7 +75,7 @@ namespace BankTimeNET.DAO
             }
         }
 
-        public void updateBankToUserXml()
+        public void associateBankXml()
         {
             User currentUser = AppStore.currentUser;
 

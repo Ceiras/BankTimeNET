@@ -227,5 +227,3 @@ namespace BankTimeNET.DAO
         }
     }
 }
-}
-
