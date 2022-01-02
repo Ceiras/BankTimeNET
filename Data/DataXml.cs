@@ -6,7 +6,7 @@ namespace BankTimeNET.Data
 {
     public static class DataXml
     {
-        public static String dataXmlFilename = @"d:\BankTimeNET.xml";
+        public static String dataXmlFilename = @".\BankTimeNET.xml";
         public static String dataSetName = "BankTimeNET";
 
         public static DataSet readDataXml()
