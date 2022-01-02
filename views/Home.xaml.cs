@@ -1,7 +1,7 @@
-﻿using BankTimeNET.Data;
+﻿using BankTimeNET.DAO;
+using BankTimeNET.Data;
 using BankTimeNET.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -148,68 +148,16 @@ namespace BankTimeNET.Views
 
         private void unregisterButton_Click(object sender, RoutedEventArgs e)
         {
-            using (var db = new DatabaseContext())
+            UserDAO userDAO = new UserDAO();
+            if (userDAO.removeUser() > 0)
             {
-                try
-                {
-                    User? resUser = db.Users.Where((User user) => user.Id.Equals(AppStore.currentUser.Id)).FirstOrDefault();
-                    if (resUser != null)
-                    {
-                        resUser.Active = false;
-                        int res = db.SaveChanges();
-
-                        if (res > 0)
-                        {
-                            removeUserXml(resUser);
-                            AppStore.currentUser = null;
-                            homeFrame.Navigate(new Login());
-                            MessageBox.Show("Removed user successfully", "Remove User", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Error removing user", "EROR: Remove User", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("The user selected does not exists", "ERROR: Remove User", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-                catch (DbUpdateException sqlException)
-                {
-                    MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: Remove User", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                userDAO.removeUserXml();
+                homeFrame.Navigate(new Login());
+                MessageBox.Show("Removed user successfully", "Remove User", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-        }
-
-        private void removeUserXml(User user)
-        {
-            try
+            else
             {
-                DataSet dataset = DataXml.readDataXml();
-
-                DataRow userRow = null;
-                foreach (DataRow row in dataset.Tables["Users"].Rows)
-                {
-                    if (row.ItemArray[0].Equals(user.Dni))
-                    {
-                        userRow = row;
-                        break;
-                    }
-                }
-
-                if (userRow != null)
-                {
-                    userRow.BeginEdit();
-                    userRow["active"] = user.Active;
-                    userRow.EndEdit();
-
-                    DataXml.writeDataXml(dataset);
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Remove XML User", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error removing user", "EROR: Remove User", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -219,44 +167,17 @@ namespace BankTimeNET.Views
 
             if (selectedItem != null)
             {
-                using (var db = new DatabaseContext())
+                ServiceDAO serviceDAO = new ServiceDAO();
+                if (serviceDAO.removeService(selectedItem) > 0)
                 {
-                    db.Services.Remove(selectedItem);
-                    int res = db.SaveChanges();
-                    if (res > 0)
-                    {
-                        removeServiceXml(selectedItem);
-                        this.InitializeTables();
-                        MessageBox.Show("Service removed successfully", "Remove Service", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("It had been impossible remove the service because fails the connection to database", "ERROR: Remove Service", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    serviceDAO.removeServiceXml(selectedItem);
+                    this.InitializeTables();
+                    MessageBox.Show("Service removed successfully", "Remove Service", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-            }
-        }
-
-        private void removeServiceXml(Service service)
-        {
-            try
-            {
-                DataSet dataset = DataXml.readDataXml();
-
-                for (int i = 0; i < dataset.Tables["Services"].Rows.Count; i++)
+                else
                 {
-                    if (dataset.Tables["Services"].Rows[i].ItemArray[0].Equals(service.Id.ToString()))
-                    {
-                        dataset.Tables["Services"].Rows[i].Delete();
-
-                        DataXml.writeDataXml(dataset);
-                        break;
-                    }
+                    MessageBox.Show("It had been impossible remove the service because fails the connection to database", "ERROR: Remove Service", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Remove Service", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -266,58 +187,17 @@ namespace BankTimeNET.Views
 
             if (selectedItem != null)
             {
-                using (var db = new DatabaseContext())
+                ServiceDAO serviceDAO = new ServiceDAO();
+                if (serviceDAO.acceptService(selectedItem) > 0)
                 {
-                    Service? resService = db.Services.Where((Service service) => service.Id.Equals(selectedItem.Id)).FirstOrDefault();
-                    if (resService != null)
-                    {
-                        resService.DoneUser = AppStore.currentUser;
-                        resService.State = ServiceState.Accepted;
-                        int res = db.SaveChanges();
-                        if (res > 0)
-                        {
-                            acceptServiceXml(resService);
-                            this.InitializeTables();
-                            MessageBox.Show("Service accepted", "Accept Service", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("It had been impossible accept the service because fails the connection to database", "ERROR: Accept Service", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
+                    serviceDAO.acceptServiceXml(selectedItem);
+                    this.InitializeTables();
+                    MessageBox.Show("Service accepted", "Accept Service", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-            }
-        }
-
-        private void acceptServiceXml(Service service)
-        {
-            try
-            {
-                DataSet dataset = DataXml.readDataXml();
-
-                DataRow serviceRow = null;
-                foreach (DataRow row in dataset.Tables["Services"].Rows)
+                else
                 {
-                    if (row.ItemArray[0].Equals(service.Id.ToString()))
-                    {
-                        serviceRow = row;
-                        break;
-                    }
+                    MessageBox.Show("It had been impossible accept the service because fails the connection to database", "ERROR: Accept Service", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-
-                if (serviceRow != null)
-                {
-                    serviceRow.BeginEdit();
-                    serviceRow["doneUserId"] = AppStore.currentUser.Id;
-                    serviceRow["state"] = ServiceState.Accepted;
-                    serviceRow.EndEdit();
-
-                    DataXml.writeDataXml(dataset);
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Accept Service", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

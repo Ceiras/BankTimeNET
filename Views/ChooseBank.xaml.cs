@@ -1,4 +1,5 @@
-﻿using BankTimeNET.Data;
+﻿using BankTimeNET.DAO;
+using BankTimeNET.Data;
 using BankTimeNET.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,7 +29,7 @@ namespace BankTimeNET.Views
                 try
                 {
                     ListView bankListView = new ListView();
-                    foreach(Bank bank in db.Banks)
+                    foreach (Bank bank in db.Banks)
                     {
                         this.bankListBox.Items.Add(bank.Place);
                     }
@@ -46,49 +47,19 @@ namespace BankTimeNET.Views
 
             if (bankPlace.Length > 0)
             {
-                using (var db = new DatabaseContext())
+                Bank newBank = new Bank(bankPlace);
+                BankDAO bankDAO = new BankDAO();
+                if (bankDAO.addBank(newBank) > 0)
                 {
-                    try
-                    {
-                        Bank newBank = new Bank(bankPlace);
-                        db.Banks.Add(newBank);
-                        int res = db.SaveChanges();
-
-                        if (res > 0)
-                        {
-                            addBankXml(newBank);
-                            this.newBankInput.Text = "";
-                            this.populateBankListView();
-                            MessageBox.Show("Created successfully", "New Bank", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Error creating the new bank", "ERROR: New Bank", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    catch (DbUpdateException sqlException)
-                    {
-                        MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: New Bank", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    bankDAO.addBankXml(newBank);
+                    this.newBankInput.Text = "";
+                    this.populateBankListView();
+                    MessageBox.Show("Created successfully", "New Bank", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-            }
-        }
-
-        private void addBankXml(Bank bank)
-        {
-            try
-            {
-                DataSet dataset = DataXml.readDataXml();
-
-                DataRow newBank = dataset.Tables["Banks"].NewRow();
-                newBank["place"] = bank.Place;
-                dataset.Tables["Banks"].Rows.Add(bank.Place);
-
-                DataXml.writeDataXml(dataset);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Add Bank", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                {
+                    MessageBox.Show("Error creating the new bank", "ERROR: New Bank", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -96,64 +67,16 @@ namespace BankTimeNET.Views
         {
             String selectedItem = this.bankListBox.Items[this.bankListBox.SelectedIndex].ToString();
 
-            using (var db = new DatabaseContext())
+            BankDAO bankDAO = new BankDAO();
+            if (bankDAO.associateBank(selectedItem) > 0)
             {
-                Bank? resBank = db.Banks.Where((Bank bank) => bank.Place.Equals(selectedItem)).FirstOrDefault();
-                if (resBank != null)
-                {
-                    User? resUser = db.Users.Where((User user) => user.Dni.Equals(AppStore.currentUser.Dni)).FirstOrDefault();
-                    if (resUser != null)
-                    {
-                        resUser.Bank = resBank;
-                        int res = db.SaveChanges();
-                        if (res > 0)
-                        {
-                            updateBankToUserXml(resUser, resBank);
-                            AppStore.currentUser = resUser;
-                            MessageBox.Show("Bank associated successfully", "Choose Bank", MessageBoxButton.OK, MessageBoxImage.Information);
-                            chooseBankFrame.Navigate(new Home());
-                        }
-                        else
-                        {
-                            MessageBox.Show("It had been impossible associate the bank to the user because fails the connection to database", "ERROR: Choose Bank", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("It had been impossible associate the bank to the user", "ERROR: Choose Bank", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                bankDAO.updateBankToUserXml();
+                MessageBox.Show("Bank associated successfully", "Choose Bank", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.chooseBankFrame.Navigate(new Home());
             }
-        }
-
-        private void updateBankToUserXml(User user, Bank bank)
-        {
-            try
+            else
             {
-                DataSet dataset = DataXml.readDataXml();
-
-                DataRow userRow = null;
-                foreach(DataRow row in dataset.Tables["Users"].Rows)
-                {
-                    if (row.ItemArray[0].Equals(user.Dni))
-                    {
-                        userRow = row;
-                        break;
-                    }
-                }
-
-                if (userRow != null)
-                {
-                    userRow.BeginEdit();
-                    userRow["bankId"] = bank.Id;
-                    userRow.EndEdit();
-
-                    DataXml.writeDataXml(dataset);
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Choose Bank", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("It had been impossible associate the bank to the user because fails the connection to database", "ERROR: Choose Bank", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

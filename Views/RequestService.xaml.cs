@@ -1,7 +1,7 @@
-﻿using BankTimeNET.Data;
+﻿using BankTimeNET.DAO;
+using BankTimeNET.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -46,13 +46,10 @@ namespace BankTimeNET.Views
                 {
                     DateTime dateService = new(date.Year, date.Month, date.Day, Int32.Parse(timeHours), Int32.Parse(timeMinutes), 0);
                     Service newService = new(dateService, description, Int32.Parse(timeRequest), 0, ServiceState.Pending, AppStore.currentUser, null, AppStore.currentUser.Bank);
-                    db.Entry(newService.RequestUser).State = EntityState.Unchanged;
-                    db.Entry(newService.Bank).State = EntityState.Unchanged;
-                    db.Services.Add(newService);
-                    int res = db.SaveChanges();
-                    if (res > 0)
+                    ServiceDAO serviceDAO = new ServiceDAO();
+                    if (serviceDAO.newService(newService) > 0)
                     {
-                        addServiceXml(newService);
+                        serviceDAO.addServiceXml(newService);
                         MessageBox.Show("Services created", "New Service", MessageBoxButton.OK, MessageBoxImage.Information);
                         requestServiceFrame.Navigate(new Home());
                     }
@@ -65,32 +62,6 @@ namespace BankTimeNET.Views
                 {
                     MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: New Service", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-        }
-
-        private void addServiceXml(Service service)
-        {
-            try
-            {
-                DataSet dataset = DataXml.readDataXml();
-
-                DataRow newService = dataset.Tables["Services"].NewRow();
-                newService["id"] = service.Id;
-                newService["date"] = service.Date;
-                newService["description"] = service.Description;
-                newService["requestTime"] = service.RequestTime;
-                newService["doneTime"] = service.DoneTime;
-                newService["state"] = service.State;
-                newService["requestUserId"] = service.RequestUser != null ? service.RequestUser.Id : "";
-                newService["doneUserId"] = service.DoneUser != null ? service.DoneUser.Id : "";
-                newService["bankId"] = service.Bank != null ? service.Bank.Id : "";
-                dataset.Tables["Services"].Rows.Add(newService);
-
-                DataXml.writeDataXml(dataset);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Add XML Service", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

@@ -1,8 +1,6 @@
-﻿using BankTimeNET.Data;
+﻿using BankTimeNET.DAO;
 using BankTimeNET.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,51 +22,17 @@ namespace BankTimeNET.Views
             String name = this.nameInput.Text;
             String password = this.passwordInput.Password;
 
-            using (var db = new DatabaseContext())
+            User newUser = new(dni, name, password, 0, true, null);
+            UserDAO userDAO = new UserDAO();
+            if (userDAO.newUser(newUser) > 0)
             {
-                try
-                {
-                    User newUser = new(dni, name, password, 0, true, null);
-                    db.Users.Add(newUser);
-                    int res = db.SaveChanges();
-                    if (res > 0)
-                    {
-                        addUserXml(newUser);
-                        MessageBox.Show("Inserted successfully", "New User", MessageBoxButton.OK, MessageBoxImage.Information);
-                        singupFrame.Navigate(new Login());
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error creating the user", "ERROR: New User", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-                catch (DbUpdateException sqlException)
-                {
-                    MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: New User", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                userDAO.addUserXml(newUser);
+                MessageBox.Show("Inserted successfully", "New User", MessageBoxButton.OK, MessageBoxImage.Information);
+                singupFrame.Navigate(new Login());
             }
-        }
-
-        private void addUserXml(User user)
-        {
-            try
+            else
             {
-                DataSet dataset = DataXml.readDataXml();
-
-                DataRow newUser = dataset.Tables["Users"].NewRow();
-                newUser["dni"] = user.Dni;
-                newUser["name"] = user.Name;
-                newUser["password"] = user.Password;
-                newUser["amount"] = user.Amount;
-                newUser["active"] = user.Active;
-                newUser["bankId"] = user.Bank != null ? user.Bank.Id : "";
-                dataset.Tables["Users"].Rows.Add(newUser);
-
-                DataXml.writeDataXml(dataset);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception: " + e.ToString(), "ERROR: Add XML User", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error creating the user", "ERROR: New User", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
