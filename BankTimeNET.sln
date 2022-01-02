@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankTimeNET", "BankTimeNET.csproj", "{AC9F0A30-4C8B-4B18-9AFE-734F35D26EC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankTimeNET", "BankTimeNET.csproj", "{AC9F0A30-4C8B-4B18-9AFE-734F35D26EC4}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupBankTime.NET", "SetupBankTime.NET\SetupBankTime.NET.vdproj", "{79D7A2F3-923C-42ED-A2DD-4EBE4569AD69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{AC9F0A30-4C8B-4B18-9AFE-734F35D26EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC9F0A30-4C8B-4B18-9AFE-734F35D26EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC9F0A30-4C8B-4B18-9AFE-734F35D26EC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79D7A2F3-923C-42ED-A2DD-4EBE4569AD69}.Debug|Any CPU.ActiveCfg = Debug
+		{79D7A2F3-923C-42ED-A2DD-4EBE4569AD69}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
