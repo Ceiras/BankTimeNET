@@ -17,6 +17,7 @@ namespace BankTimeNET.Views
         {
             InitializeComponent();
         }
+
         private void singUpButton_Click(object sender, RoutedEventArgs e)
         {
             String dni = this.dniInput.Text;
