@@ -55,6 +55,7 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
+                <Button Name="confirmService" Content="Confirm Service" Click="confirmService_Click" Width="150" Margin="0,5,17,0" HorizontalAlignment="Right"/>
 
                 <Label Name="requestedServicesTitle" Content="Requested Services" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="24"/>
                 <ListView Name="requestedServicesListView" Margin="0,10,0,0" Height="100" Width="500">
@@ -62,6 +63,7 @@
                         <GridView>
                             <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=Id}"/>
                             <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Path=Date, StringFormat='dd/MM/yyyy HH:mm'}"/>
+                            <GridViewColumn Header="State" DisplayMemberBinding="{Binding Path=State}"/>
                             <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Path=Description}"/>
                         </GridView>
                     </ListView.View>

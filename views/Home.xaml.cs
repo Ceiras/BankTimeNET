@@ -32,6 +32,15 @@ namespace BankTimeNET.Views
 
         private void InitializeUserData()
         {
+            using (var db = new DatabaseContext())
+            {
+                User? res = db.Users.Include((User user) => user.Bank).Where((User user) => user.Dni.Equals(AppStore.currentUser.Dni)).FirstOrDefault();
+                if (res != null)
+                {
+                    AppStore.currentUser = res;
+                }
+            }
+
             this.nameLabel.Content = AppStore.currentUser.Name;
             this.dniLabel.Content = AppStore.currentUser.Dni;
             this.amountLabel.Content = AppStore.currentUser.Amount + " h";
@@ -52,30 +61,6 @@ namespace BankTimeNET.Views
             }
         }
 
-        private void InitializeRequestedServicesTable()
-        {
-            this.requestedServicesListView.ItemsSource = new List<Service>();
-
-            using (var db = new DatabaseContext())
-            {
-                try
-                {
-                    List<Service> resServices = db.Services
-                        .Include((Service service) => service.RequestUser)
-                        .Include((Service service) => service.DoneUser)
-                        .Include((Service service) => service.Bank)
-                        .Where((Service service) => service.Bank.Equals(AppStore.currentUser.Bank))
-                        .Where((Service service) => service.RequestUser.Equals(AppStore.currentUser))
-                        .ToList();
-                    this.requestedServicesListView.ItemsSource = resServices;
-                }
-                catch (DbUpdateException sqlException)
-                {
-                    MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: Initialize Request Services Table", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
         private void InitializeAceptedServicesTable()
         {
             this.acceptedServicesListView.ItemsSource = new List<Service>();
@@ -90,12 +75,38 @@ namespace BankTimeNET.Views
                         .Include((Service service) => service.Bank)
                         .Where((Service service) => service.Bank.Equals(AppStore.currentUser.Bank))
                         .Where((Service service) => service.DoneUser.Equals(AppStore.currentUser))
+                        .Where((Service service) => !service.State.Equals(ServiceState.Done))
                         .ToList();
                     this.acceptedServicesListView.ItemsSource = resServices;
                 }
                 catch (DbUpdateException sqlException)
                 {
                     MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: Initialize Accepted Services Table", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void InitializeRequestedServicesTable()
+        {
+            this.requestedServicesListView.ItemsSource = new List<Service>();
+
+            using (var db = new DatabaseContext())
+            {
+                try
+                {
+                    List<Service> resServices = db.Services
+                        .Include((Service service) => service.RequestUser)
+                        .Include((Service service) => service.DoneUser)
+                        .Include((Service service) => service.Bank)
+                        .Where((Service service) => service.Bank.Equals(AppStore.currentUser.Bank))
+                        .Where((Service service) => service.RequestUser.Equals(AppStore.currentUser))
+                        .Where((Service service) => service.State.Equals(ServiceState.Pending))
+                        .ToList();
+                    this.requestedServicesListView.ItemsSource = resServices;
+                }
+                catch (DbUpdateException sqlException)
+                {
+                    MessageBox.Show("ERROR: " + sqlException.InnerException, "ERROR: Initialize Request Services Table", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -114,7 +125,7 @@ namespace BankTimeNET.Views
                         .Include((Service service) => service.Bank)
                         .Where((Service service) => service.Bank.Equals(AppStore.currentUser.Bank))
                         .Where((Service service) => !service.RequestUser.Equals(AppStore.currentUser))
-                        .Where((Service service) => !service.State.Equals(ServiceState.Accepted))
+                        .Where((Service service) => service.State.Equals(ServiceState.Pending))
                         .ToList();
                     this.bankServicesListView.ItemsSource = resServices;
                 }
@@ -307,6 +318,16 @@ namespace BankTimeNET.Views
             catch (Exception e)
             {
                 MessageBox.Show("Exception: " + e.ToString(), "ERROR: Accept Service", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void confirmService_Click(object sender, RoutedEventArgs e)
+        {
+            Service? selectedItem = this.acceptedServicesListView.SelectedIndex > -1 ? (Service)this.acceptedServicesListView.Items[this.acceptedServicesListView.SelectedIndex] : null;
+
+            if (selectedItem != null)
+            {
+                homeFrame.Navigate(new ConfirmService(selectedItem));
             }
         }
     }
